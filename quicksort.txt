@@ -1,0 +1,86 @@
+import java.util.Arrays;
+import java.util.Random;
+
+public class Main {
+
+    public static void main(String[] args) {
+        int[] arraySizes = {8, 6, 4, 22, 12, 3, 5, 7, 18, 15, 19};
+        System.out.println("Original Array: " + Arrays.toString(arraySizes));
+
+        // Randomized QuickSort
+        int[] copy1 = Arrays.copyOf(arraySizes, arraySizes.length);
+        long randomStartTime = System.currentTimeMillis();
+        randomQuickSort(copy1, 0, copy1.length - 1);
+        long randomEndTime = System.currentTimeMillis();
+        System.out.println("Randomized QuickSort: " + Arrays.toString(copy1) + ": " + (randomEndTime - randomStartTime) + " milliseconds");
+
+        // Deterministic QuickSort
+        int[] copy2 = Arrays.copyOf(arraySizes, arraySizes.length);
+
+        long deterministicStartTime = System.currentTimeMillis();
+        deterministicQuickSort(copy2, 0, copy2.length - 1);
+        long deterministicEndTime = System.currentTimeMillis();
+        System.out.println("Deterministic QuickSort: " + Arrays.toString(copy2) + ": " + (deterministicEndTime - deterministicStartTime) + " milliseconds");
+    }
+
+    public static void randomQuickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = randomPartition(array, low, high);
+            randomQuickSort(array, low, pivotIndex - 1);
+            randomQuickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    public static void deterministicQuickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = deterministicPartition(array, low, high);
+            deterministicQuickSort(array, low, pivotIndex - 1);
+            deterministicQuickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    private static int deterministicPartition(int[] array, int low, int high) {
+        int pivotIndex = low + (high - low) / 2;
+        int pivot = array[pivotIndex];
+
+        // Move the pivot to the end of the array
+        swap(array, pivotIndex, high);
+
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                swap(array, i, j);
+            }
+        }
+
+        swap(array, i + 1, high);
+        return i + 1;
+    }
+
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    private static int randomPartition(int[] array, int low, int high) {
+        // Randomly choose pivot index and swap with the last element
+        int pivotIndex = low + new Random().nextInt(high - low + 1);
+        swap(array, pivotIndex, high);
+
+        int pivot = array[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                swap(array, i, j);
+            }
+        }
+
+        swap(array, i + 1, high);
+        return i + 1;
+    }
+}

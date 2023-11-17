@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+public class FibonacciRecursive {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the position of the Fibonacci number: ");
+        int n = scanner.nextInt();
+
+        long fibonacciNumber = calculateFibonacciRecursive(n);
+
+        System.out.printf("Fibonacci(%d) = %d\n", n, fibonacciNumber);
+    }
+
+    public static long calculateFibonacciRecursive(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return calculateFibonacciRecursive(n - 1) + calculateFibonacciRecursive(n - 2);
+    }
+}
